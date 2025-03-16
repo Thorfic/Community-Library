@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function validateForm() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            if (!username || !password) {
+                alert('Please fill in all fields!');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Library Login</h2>
+        <form method="POST" action="login.php" onsubmit="return validateForm()">
+            <label>Username:</label>
+            <input type="text" name="username" id="username" required><br>
+            <label>Password:</label>
+            <input type="password" name="password" id="password" required><br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
