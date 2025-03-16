@@ -40,10 +40,10 @@
             $role = $_POST['role'];
 
             $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ? AND role = ? AND status = 'active'");
-            $stmt->execute([$username, role]);
+            $stmt->execute([$username, $role]);
             $user = $stmt->fetch();
 
-            if ($user && password_verify($password, user['password'])) {
+            if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['role'] = $user['role'];
                 header("Location: " . ($role == 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php'));
