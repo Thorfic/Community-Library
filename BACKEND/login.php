@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['role'] = $user['role'];
         $_SESSION['last_activity'] = time(); 
-        header("Location: " . ($role == 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php'));
+        header("Location: user_dashboard.php" . ($role == 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php'));
         exit();
     } else {
        
@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 } else {
-    // If accessed directly, redirect to index.html
     header("Location: index.html");
     exit();
 }
