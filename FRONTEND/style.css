@@ -50,30 +50,8 @@ button {
 }
 button:hover {
     background-color: #0056b3;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 30px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    border-radius: 6px;
-    overflow: hidden;
 
-}
-th, td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-}
-th {
-    background-color: #f8f9fa;
-    color: #555;
-    font-weight: 600;
-
-tr:hover {
-    background-color: #f5f5f5;
 }
 input, select, button, table {
     animation: fadeIN 0.5s ease-out;
-}
 }
