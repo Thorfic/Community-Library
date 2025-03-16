@@ -32,24 +32,24 @@
                     <button type="submit">Login</button>
             </form>
         <?php
-        session start ();
+        session_start ();
         if ($_SERVER ['REQUEST_METHOD'] == 'POST') {
             include 'db_connect.php';
             $username = $_POST['username'];
             $password = $_POST['password'];
             $role = $_POST['role'];
 
-            $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ? AND role = ? AND status = 'active'")
+            $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = ? AND role = ? AND status = 'active'");
             $stmt->execute([$username, role]);
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, user['password'])) {
                 $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['role'] = $user['role'];
-                header("Location; " . ($role == 'admin' ? 'admin/dashboard.php' : user/dashboard.php'));
+                header("Location: " . ($role == 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php'));
                 exit();
                 } else {
-                    echo "<p style='color:red;'Invalid credentials or role</p>"    
+                    echo "<p style='color:red'>Invalid credentials or role'</p>";    
                 }
         }
         ?>
