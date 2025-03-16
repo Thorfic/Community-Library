@@ -2,14 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Library Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urquhart Library Management - Login</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
         function validateForm() {
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             if (!username || !password) {
-                alert('Please fill in all fields!');
+                alert('Please fill in all fields');
+                return false;
+            }
+            if (username.length > 50) {
+                alert('Username must be 50 characters or less');
                 return false;
             }
             return true;
@@ -18,12 +24,18 @@
 </head>
 <body>
     <div class="container">
-        <h2>Library Login</h2>
-        <form method="POST" action="login.php" onsubmit="return validateForm()">
+        <h2>Login</h2>
+        <form method="POST" action="index.php" onsubmit="return validateForm()">
             <label>Username:</label>
-            <input type="text" name="username" id="username" required><br>
+            <input type="text" id="username" name="username" maxlength="50" required><br>
             <label>Password:</label>
-            <input type="password" name="password" id="password" required><br>
+            <input type="password" id="password" name="password" required><br>
+            <label>Role:</label>
+            <select name="role" required>
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select><br>
+            <!-- CSRF token will be added dynamically by PHP if needed -->
             <button type="submit">Login</button>
         </form>
     </div>
