@@ -1,0 +1,83 @@
+body {
+    font-family: 'Motserrat', sans-serif;
+    background-color: #e6f7ff;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    line-height: 1.6;
+    background-image: url('libraryimage.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container {
+    width: 70%;
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    border-top: 4px solid #ff8800;
+}
+h2 {
+    text-align: center;
+    color: #ff8800;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+label {
+    display: block;
+    margin: 15px 0 8px;
+    color: #555;
+    font-weight: 500;
+}
+input[type="text"],
+input[type="password"],
+ select,
+textarea {
+    width: calc(100% - 16px);
+    padding: 12px;
+    margin-bottom: 20px;
+    border:1px solid #cce5ff;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #007bff;
+        outline:none;
+        box-shadow: 0 0 5px rgba(0,123,255,0.5);
+        }
+button {
+    background-color: #ff8800;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+    width: 100%;
+}
+button:hover {
+    background-color: #0056b3;
+
+}
+input, select, button, table {
+    animation: fadeINDown 0.5s ease-out;
+}
+.container {
+    animation: fadeInDOwn 0.5s ease-out;
+}
+@keyframes fadeInDown {
+    from {opacity: 0; transform: translateY(-30px);}
+    to {opacity: 1; transform: translateY(0);}
+}
