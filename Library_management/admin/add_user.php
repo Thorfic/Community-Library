@@ -11,28 +11,39 @@ $error = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = $_POST['title'] ?? '';
-    $author = $_POST['author'] ?? '';
-    $isbn = $_POST['isbn'] ?? '';
-    $genre = $_POST['genre'] ?? '';
-    $quantity = $_POST['quantity'] ?? 1;
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $confirm_password = $_POST['confirm_password'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $full_name = $_POST['full_name'] ?? '';
+    $role = $_POST['role'] ?? 'user';
 
-    if (empty($title) || empty($author) || empty($isbn) || empty($genre)) {
+    if (empty($username) || empty($password) || empty($confirm_password) || empty($email) || empty($full_name)) {
         $error = 'All fields are required';
+    } elseif ($password !== $confirm_password) {
+        $error = 'Passwords do not match';
     } else {
         try {
-            // Check if ISBN already exists
-            $stmt = $conn->prepare("SELECT COUNT(*) FROM books WHERE isbn = ?");
-            $stmt->execute([$isbn]);
+            // Check if username already exists
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
+            $stmt->execute([$username]);
             if ($stmt->fetchColumn() > 0) {
-                $error = 'ISBN already exists';
+                $error = 'Username already exists';
             } else {
-                $stmt = $conn->prepare("INSERT INTO books (title, author, isbn, genre, quantity, available_quantity) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$title, $author, $isbn, $genre, $quantity, $quantity]);
-                $success = 'Book added successfully';
+                // Check if email already exists
+                $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+                $stmt->execute([$email]);
+                if ($stmt->fetchColumn() > 0) {
+                    $error = 'Email already exists';
+                } else {
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt = $conn->prepare("INSERT INTO users (username, password, email, full_name, role) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->execute([$username, $hashed_password, $email, $full_name, $role]);
+                    $success = 'User added successfully';
+                }
             }
         } catch(PDOException $e) {
-            $error = "Error adding book: " . $e->getMessage();
+            $error = "Error adding user: " . $e->getMessage();
         }
     }
 }
@@ -42,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Book - <?php echo SITE_NAME; ?></title>
+    <title>Add User - <?php echo SITE_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -58,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="add_book.php">Add Book</a>
+                        <a class="nav-link" href="add_book.php">Add Book</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="add_user.php">Add User</a>
+                        <a class="nav-link active" href="add_user.php">Add User</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -78,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Add New Book</h5>
+                        <h5 class="mb-0">Add New User</h5>
                     </div>
                     <div class="card-body">
                         <?php if ($error): ?>
@@ -91,32 +102,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <form method="POST" action="">
                             <div class="mb-3">
-                                <label for="title" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="author" class="form-label">Author</label>
-                                <input type="text" class="form-control" id="author" name="author" required>
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="isbn" class="form-label">ISBN</label>
-                                <input type="text" class="form-control" id="isbn" name="isbn" required>
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="genre" class="form-label">Genre</label>
-                                <input type="text" class="form-control" id="genre" name="genre" required>
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="quantity" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" required>
+                                <label for="full_name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="full_name" name="full_name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select class="form-select" id="role" name="role" required>
+                                    <option value="user">User</option>
+                                    <option value="admin">Admin</option>
+                                </select>
                             </div>
 
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">Add Book</button>
+                                <button type="submit" class="btn btn-primary">Add User</button>
                                 <a href="dashboard.php" class="btn btn-secondary">Back to Dashboard</a>
                             </div>
                         </form>

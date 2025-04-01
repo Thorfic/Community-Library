@@ -20,6 +20,12 @@
             }
             return true;
         }
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error')) {
+                document.getElementById('error').textContent = urlParams.get('error');
+            }
+        }
     </script>
 </head>
 <body>

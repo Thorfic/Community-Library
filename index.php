@@ -17,19 +17,20 @@ function validateCsrfToken($token) {
 session_regenerate_id(true);
 ini_set('session.cookie_httponly', 1);
 
+//form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        generateCsrfToken();
+    generateCsrfToken();
 
-     if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
+    if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
         die("Invalid CSRF token.");
     }
 
-    $username = filter_input(INPUT_POST, 'username'); 
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
-    $role = filter_input(INPUT_POST, var_name: 'role');
+    $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
 
     if (!in_array($role, ['admin', 'user'])) {
-         header("Location: index.html?error=" . urlencode("Invalid role selected"));
+        header("Location: index.html?error=" . urlencode("Invalid role selected"));
         exit();
     }
 
@@ -41,10 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['role'] = $user['role'];
         $_SESSION['last_activity'] = time(); 
-        header("Location: user_dashboard.php" . ($role == 'admin' ? 'admin_dashboard.php' : 'user/dashboard.php'));
+        header("Location: " . ($role == 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php'));
         exit();
     } else {
-       
         header("Location: index.html?error=" . urlencode("Invalid credentials or role"));
         exit();
     }
