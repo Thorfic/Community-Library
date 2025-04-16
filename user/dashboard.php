@@ -126,49 +126,66 @@ $genres = $conn->query("SELECT DISTINCT genre FROM books ORDER BY genre")->fetch
     <title>User Dashboard - <?php echo SITE_NAME; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#"><?php echo SITE_NAME; ?> - User</a>
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-book" style="margin-right: 8px;"></i>
+                <?php echo SITE_NAME; ?>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="dashboard.php">Dashboard</a>
+                        <a class="nav-link active" href="dashboard.php">
+                            <i class="bi bi-grid"></i> Dashboard
+                        </a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="../logout.php">Logout</a>
+                        <a class="nav-link" href="../logout.php">
+                            <i class="bi bi-box-arrow-right"></i> Sign Out
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container py-4">
         <?php if ($error): ?>
-            <div class="alert alert-danger"><?php echo $error; ?></div>
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle"></i> <?php echo $error; ?>
+            </div>
         <?php endif; ?>
         
         <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo $success; ?></div>
+            <div class="alert alert-success">
+                <i class="bi bi-check-circle"></i> <?php echo $success; ?>
+            </div>
         <?php endif; ?>
 
-        <div class="row">
+        <div class="row g-4">
             <!-- Search Section -->
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h5 class="mb-0">Search Books</h5>
+                        <h5 class="mb-0"><i class="bi bi-search"></i> Search Books</h5>
                     </div>
                     <div class="card-body">
                         <form method="GET" class="row g-3">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="search" placeholder="Search by title or author" value="<?php echo htmlspecialchars($search); ?>">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-end-0">
+                                        <i class="bi bi-book"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0" name="search" placeholder="Search by title or author" value="<?php echo htmlspecialchars($search); ?>">
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <select class="form-select" name="genre">
@@ -181,12 +198,14 @@ $genres = $conn->query("SELECT DISTINCT genre FROM books ORDER BY genre")->fetch
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">Search</button>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-search"></i> Search
+                                </button>
                             </div>
                         </form>
 
                         <div class="table-responsive mt-4">
-                            <table class="table table-striped">
+                            <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -199,20 +218,29 @@ $genres = $conn->query("SELECT DISTINCT genre FROM books ORDER BY genre")->fetch
                                 <tbody>
                                     <?php foreach ($books as $book): ?>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($book['title']); ?></td>
+                                            <td class="fw-medium"><?php echo htmlspecialchars($book['title']); ?></td>
                                             <td><?php echo htmlspecialchars($book['author']); ?></td>
-                                            <td><?php echo htmlspecialchars($book['genre']); ?></td>
-                                            <td><?php echo $book['available_quantity']; ?>/<?php echo $book['quantity']; ?></td>
+                                            <td><span class="badge bg-light text-dark"><?php echo htmlspecialchars($book['genre']); ?></span></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-2 <?php echo $book['available_quantity'] > 0 ? 'text-success' : 'text-danger'; ?>">
+                                                        <i class="bi <?php echo $book['available_quantity'] > 0 ? 'bi-circle-fill' : 'bi-circle'; ?>"></i>
+                                                    </div>
+                                                    <?php echo $book['available_quantity']; ?>/<?php echo $book['quantity']; ?>
+                                                </div>
+                                            </td>
                                             <td>
                                                 <?php if ($book['available_quantity'] > 0): ?>
                                                     <form method="POST" class="d-inline">
                                                         <input type="hidden" name="book_id" value="<?php echo $book['book_id']; ?>">
                                                         <button type="submit" name="borrow_book" class="btn btn-sm btn-success">
-                                                            <i class="bi bi-book"></i> Borrow
+                                                            <i class="bi bi-plus-circle"></i> Borrow
                                                         </button>
                                                     </form>
                                                 <?php else: ?>
-                                                    <span class="badge bg-danger">Not Available</span>
+                                                    <span class="badge bg-danger">
+                                                        <i class="bi bi-x-circle"></i> Not Available
+                                                    </span>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -228,25 +256,40 @@ $genres = $conn->query("SELECT DISTINCT genre FROM books ORDER BY genre")->fetch
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">My Active Loans</h5>
+                        <h5 class="mb-0"><i class="bi bi-collection"></i> My Active Loans</h5>
                     </div>
                     <div class="card-body">
                         <?php if (empty($loans)): ?>
-                            <p class="text-muted">No active loans</p>
+                            <div class="text-center text-muted py-4">
+                                <i class="bi bi-inbox display-4"></i>
+                                <p class="mt-3">No active loans</p>
+                            </div>
                         <?php else: ?>
                             <div class="list-group">
                                 <?php foreach ($loans as $loan): ?>
                                     <div class="list-group-item">
-                                        <h6 class="mb-1"><?php echo htmlspecialchars($loan['title']); ?></h6>
-                                        <p class="mb-1">By <?php echo htmlspecialchars($loan['author']); ?></p>
-                                        <small class="text-muted">Due: <?php echo date('M d, Y', strtotime($loan['due_date'])); ?></small>
-                                        <form method="POST" class="mt-2">
-                                            <input type="hidden" name="loan_id" value="<?php echo $loan['loan_id']; ?>">
-                                            <input type="hidden" name="book_id" value="<?php echo $loan['book_id']; ?>">
-                                            <button type="submit" name="return_book" class="btn btn-sm btn-warning">
-                                                <i class="bi bi-arrow-return-left"></i> Return
-                                            </button>
-                                        </form>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <h6 class="mb-0"><?php echo htmlspecialchars($loan['title']); ?></h6>
+                                            <?php
+                                                $due_date = strtotime($loan['due_date']);
+                                                $days_left = ceil(($due_date - time()) / (60 * 60 * 24));
+                                                $badge_class = $days_left <= 3 ? 'bg-danger' : ($days_left <= 7 ? 'bg-warning text-dark' : 'bg-success');
+                                            ?>
+                                            <span class="badge <?php echo $badge_class; ?>">
+                                                <?php echo $days_left; ?> days left
+                                            </span>
+                                        </div>
+                                        <p class="mb-2 text-muted">By <?php echo htmlspecialchars($loan['author']); ?></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Due: <?php echo date('M d, Y', strtotime($loan['due_date'])); ?></small>
+                                            <form method="POST">
+                                                <input type="hidden" name="loan_id" value="<?php echo $loan['loan_id']; ?>">
+                                                <input type="hidden" name="book_id" value="<?php echo $loan['book_id']; ?>">
+                                                <button type="submit" name="return_book" class="btn btn-sm btn-warning">
+                                                    <i class="bi bi-arrow-return-left"></i> Return
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
