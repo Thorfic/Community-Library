@@ -8,7 +8,7 @@ if (!isLoggedIn() || !isAdmin()) {
 
 $conn = getDBConnection();
 
-// Handle book deletion
+// book deletion
 if (isset($_POST['delete_book'])) {
     $book_id = $_POST['book_id'];
     try {
@@ -19,7 +19,7 @@ if (isset($_POST['delete_book'])) {
     }
 }
 
-// Handle user deletion
+// user deletion
 if (isset($_POST['delete_user'])) {
     $user_id = $_POST['user_id'];
     try {
@@ -35,7 +35,7 @@ $search = $_GET['search'] ?? '';
 $sort_by = $_GET['sort_by'] ?? 'title';
 $sort_order = $_GET['sort_order'] ?? 'asc';
 
-// Build the query for books with search and sort
+// search and sort query for books
 $books_query = "SELECT b.*, 
                 (SELECT COUNT(*) FROM loans l WHERE l.book_id = b.book_id AND l.return_date IS NULL) as current_loans
                 FROM books b";
@@ -130,7 +130,7 @@ $current_loans = $conn->query($loans_query)->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <div class="row">
-            <!-- Books Section -->
+            <!-- Books -->
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -144,7 +144,7 @@ $current_loans = $conn->query($loans_query)->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                     <div class="collapse books-section" id="booksSection">
                         <div class="card-body">
-                            <!-- Search Form -->
+                            <!-- Form for Search -->
                             <form class="mb-3" method="GET">
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="search" placeholder="Search books..." value="<?php echo htmlspecialchars($search); ?>">
@@ -207,7 +207,7 @@ $current_loans = $conn->query($loans_query)->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <!-- Current Loans Section -->
+            <!-- To display Current Loans -->
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">

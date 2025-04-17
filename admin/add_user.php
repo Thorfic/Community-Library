@@ -24,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Passwords do not match';
     } else {
         try {
-            // Check if username already exists
+            // Checking username prior existence
             $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
             $stmt->execute([$username]);
             if ($stmt->fetchColumn() > 0) {
                 $error = 'Username already exists';
             } else {
-                // Check if email already exists
+                // Checking email prior exists
                 $stmt = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
                 $stmt->execute([$email]);
                 if ($stmt->fetchColumn() > 0) {

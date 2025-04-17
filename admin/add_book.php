@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'All fields are required';
     } else {
         try {
-            // Check if ISBN already exists
+            // Ensuring no duplication of ISBN
             $stmt = $conn->prepare("SELECT COUNT(*) FROM books WHERE isbn = ?");
             $stmt->execute([$isbn]);
             if ($stmt->fetchColumn() > 0) {

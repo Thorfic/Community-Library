@@ -10,7 +10,7 @@ $conn = getDBConnection();
 $error = '';
 $success = '';
 
-// Handle book borrowing
+// Book borrowing
 if (isset($_POST['borrow_book'])) {
     $book_id = $_POST['book_id'];
     $user_id = $_SESSION['user_id'];
@@ -171,7 +171,7 @@ $genres = $conn->query("SELECT DISTINCT genre FROM books ORDER BY genre")->fetch
         <?php endif; ?>
 
         <div class="row g-4">
-            <!-- Search Section -->
+            <!-- Search-option  -->
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-header">
